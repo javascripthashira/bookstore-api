@@ -6,7 +6,7 @@ import { swaggerSpec } from './config/swagger';
 import { errorHandler } from './middleware/errorHandler';
 
 // Route imports — uncomment as you build each module
-// import bookRoutes from './modules/books/book.routes';
+import bookRoutes from './modules/Books/books.routes';
 import authorRoute from './modules/Authors/authors.route';
 
 const app = express();
@@ -29,7 +29,7 @@ app.use(morgan('dev'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ── Routes ────────────────────────────────────────────────
-// app.use('/books', bookRoutes);
+app.use('/books', bookRoutes);
 app.use("/authors", authorRoute);
 
 // ── Health check ──────────────────────────────────────────
