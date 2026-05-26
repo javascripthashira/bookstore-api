@@ -48,7 +48,7 @@ export async function UpdateAuthor(id: string, data: { name?: string, bio?: stri
 }
 
 export async function DeleteAuthor(id: string) {
-    await GetAuthorById(id)
+    await GetAuthorById(id);
 
     return await prisma.author.delete({
         where: {
