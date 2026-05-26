@@ -7,7 +7,7 @@ import { errorHandler } from './middleware/errorHandler';
 
 // Route imports — uncomment as you build each module
 import bookRoutes from './modules/Books/books.routes';
-import authorRoute from './modules/Authors/authors.route';
+import authorRoute from './modules/Authors/authors.routes';
 
 const app = express();
 

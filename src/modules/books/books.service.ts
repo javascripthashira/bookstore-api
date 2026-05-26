@@ -20,6 +20,18 @@ export async function createBook(data: { title: string; price: number; stock: nu
                     }
                 }))
             }
+        },
+        include: {
+            author: {
+                select: { id: true, name: true }
+            },
+            genres: {
+                include: {
+                    genre: {
+                        select: { id: true, name: true }
+                    }
+                }
+            }
         }
     });
 }
@@ -114,9 +126,6 @@ export async function getFilteredBooks(query: {
     const validSortFields = ['price', 'publishedAt', 'title'];
     const orderByField = validSortFields.includes(sort ?? '') ? sort! : 'publishedAt';
 
-    // Prisma uses parameterised queries internally — genre name is passed
-    // as a bound parameter, never interpolated into the query string.
-    // This prevents SQL injection on the filter.
     const where = genre ? {
         genres: {
             some: {
@@ -127,23 +136,22 @@ export async function getFilteredBooks(query: {
         }
     } : {};
 
-    const [books, total] = await prisma.$transaction([
-        prisma.book.findMany({
-            where,
-            orderBy: { [orderByField]: 'asc' },
-            skip: (page - 1) * limit,
-            take: limit,
-            include: {
-                author: { select: { id: true, name: true } },
-                genres: {
-                    include: {
-                        genre: { select: { id: true, name: true } }
-                    }
+    const books = await prisma.book.findMany({
+        where,
+        orderBy: { [orderByField]: 'asc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+            author: { select: { id: true, name: true } },
+            genres: {
+                include: {
+                    genre: { select: { id: true, name: true } }
                 }
             }
-        }),
-        prisma.book.count({ where })
-    ]);
+        }
+    });
+
+    const total = await prisma.book.count({ where });
 
     return {
         data: books,

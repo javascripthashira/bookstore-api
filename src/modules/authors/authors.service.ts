@@ -17,6 +17,13 @@ export async function GetAllAuthors() {
                     id: true,
                     title: true,
                     price: true,
+                    genres: {
+                        select: {
+                            genre: {
+                                select: { name: true }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -29,7 +36,18 @@ export async function GetAuthorById(id: string) {
         where: { id },
         include: {
             books: {
-                select: { id: true, title: true, price: true }
+                select: {
+                    id: true,
+                    title: true,
+                    price: true,
+                    genres: {
+                        select: {
+                            genre: {
+                                select: { name: true }
+                            }
+                        }
+                    }
+                }
             }
         }
     });

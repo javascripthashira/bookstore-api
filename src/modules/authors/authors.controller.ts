@@ -49,8 +49,8 @@ export const UpdateAuthors = async (req: Request, res: Response, next: NextFunct
 export const DeleteAuthors = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.id as string;
-        const author = await DeleteAuthor(id);
-        return res.status(200).json({ message: "Author deleted successfully", data: author })
+        await DeleteAuthor(id);
+        return res.status(204).send();
     } catch (error) {
         next(error)
     }
